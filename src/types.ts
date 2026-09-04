@@ -115,8 +115,7 @@ export type NavigationTab =
   | 'create'
   | 'messages'
   | 'notifications'
-  | 'profile'
-  | 'supabase_docs';
+  | 'profile';
 
 export interface AuthSession {
   user: User;

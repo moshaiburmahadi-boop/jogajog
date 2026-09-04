@@ -6,21 +6,16 @@ import {
   Eye, 
   EyeOff, 
   ArrowRight, 
-  ShieldCheck, 
-  Database,
-  Sparkles,
-  Zap,
-  CheckCircle2,
-  AlertCircle
+  CheckCircle2, 
+  AlertCircle 
 } from 'lucide-react';
-import { signInUser, signUpUser, quickDemoLogin, isSupabaseConfigured } from '../lib/supabase';
+import { signInUser, signUpUser } from '../lib/supabase';
 
 interface AuthScreenProps {
   onSuccess: () => void;
-  onOpenSupabaseDocs?: () => void;
 }
 
-export const AuthScreen: React.FC<AuthScreenProps> = ({ onSuccess, onOpenSupabaseDocs }) => {
+export const AuthScreen: React.FC<AuthScreenProps> = ({ onSuccess }) => {
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -72,24 +67,13 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onSuccess, onOpenSupabas
     }
   };
 
-  const handleQuickDemo = () => {
-    setError(null);
-    setLoading(true);
-    const user = quickDemoLogin('monochrome.creator');
-    setSuccessMsg(`Signed in as @${user.username}! Loading Home...`);
-    setTimeout(() => {
-      setLoading(false);
-      onSuccess();
-    }, 400);
-  };
-
   return (
     <div className="min-h-screen bg-black text-white flex flex-col justify-between relative overflow-hidden px-4 py-8 select-none">
       {/* Subtle Apple Monochrome Ambient Glows */}
       <div className="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[28rem] h-[28rem] bg-white/[0.03] rounded-full blur-3xl pointer-events-none" />
       <div className="fixed -bottom-20 -left-20 w-80 h-80 bg-white/[0.02] rounded-full blur-2xl pointer-events-none" />
 
-      {/* Top Bar with Brand and Status */}
+      {/* Top Bar with Brand */}
       <header className="relative z-10 max-w-md mx-auto w-full flex items-center justify-between pb-4">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-xl bg-white text-black flex items-center justify-center font-bold text-sm shadow-md">
@@ -97,19 +81,9 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onSuccess, onOpenSupabas
           </div>
           <div>
             <span className="font-extrabold tracking-wider text-sm uppercase text-white">Lumina</span>
-            <span className="block text-[10px] text-zinc-400">Apple Glassmorphism Social</span>
+            <span className="block text-[10px] text-zinc-400">Monochrome Social PWA</span>
           </div>
         </div>
-
-        {onOpenSupabaseDocs && (
-          <button
-            onClick={onOpenSupabaseDocs}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-zinc-900/80 hover:bg-zinc-800 text-zinc-300 text-xs border border-white/10 transition-all cursor-pointer"
-          >
-            <Database className="w-3.5 h-3.5 text-white" />
-            <span>Supabase</span>
-          </button>
-        )}
       </header>
 
       {/* Main Authentication Card */}
@@ -266,36 +240,6 @@ export const AuthScreen: React.FC<AuthScreenProps> = ({ onSuccess, onOpenSupabas
               )}
             </button>
           </form>
-
-          {/* Divider */}
-          <div className="relative my-5 text-center">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-white/10" />
-            </div>
-            <span className="relative px-3 bg-zinc-950 text-[11px] text-zinc-500 uppercase tracking-wider">
-              Or Instant Access
-            </span>
-          </div>
-
-          {/* Quick Demo One-Click Access */}
-          <button
-            type="button"
-            onClick={handleQuickDemo}
-            disabled={loading}
-            className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-semibold text-xs border border-white/15 transition-all flex items-center justify-center gap-2 cursor-pointer shadow-sm"
-          >
-            <Zap className="w-3.5 h-3.5 text-white" />
-            <span>One-Click Guest / Demo Login</span>
-          </button>
-
-          {/* Realtime Backend Status Footer */}
-          <div className="mt-5 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] text-zinc-400">
-            <span className="flex items-center gap-1.5">
-              <span className={`w-2 h-2 rounded-full ${isSupabaseConfigured ? 'bg-emerald-400 animate-pulse' : 'bg-white'}`} />
-              {isSupabaseConfigured ? 'Supabase Realtime Auth' : 'Local Fast Auth Ready'}
-            </span>
-            <span className="text-zinc-500">v3.0 Monochrome</span>
-          </div>
         </div>
       </main>
 

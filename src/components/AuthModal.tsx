@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { X, Lock, Mail, User as UserIcon, Sparkles, CheckCircle2, ArrowRight, ShieldCheck } from 'lucide-react';
-import { signInUser, signUpUser, quickDemoLogin, isSupabaseConfigured } from '../lib/supabase';
+import { X, Lock, Mail, User as UserIcon, CheckCircle2, ArrowRight } from 'lucide-react';
+import { signInUser, signUpUser } from '../lib/supabase';
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -60,18 +60,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
     }
   };
 
-  const handleDemoLogin = () => {
-    setError(null);
-    setLoading(true);
-    const user = quickDemoLogin('monochrome_user');
-    setSuccessMessage(`Signed in as demo creator @${user.username}!`);
-    setTimeout(() => {
-      setLoading(false);
-      onSuccess?.();
-      onClose();
-    }, 500);
-  };
-
   return (
     <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-2xl flex items-center justify-center p-4 animate-fade-in">
       {/* Tap backdrop to close */}
@@ -95,17 +83,9 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             {mode === 'signin' ? 'Sign in to Lumina' : 'Create Lumina Account'}
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
-            {isSupabaseConfigured ? (
-              <span className="inline-flex items-center gap-1.5 text-emerald-400">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-                Supabase Auth Connected
-              </span>
-            ) : (
-              <span className="inline-flex items-center gap-1.5 text-zinc-400">
-                <ShieldCheck className="w-3.5 h-3.5 text-zinc-300" />
-                Secure Instant Authentication
-              </span>
-            )}
+            {mode === 'signin' 
+              ? 'Enter your credentials to access your account' 
+              : 'Join the monochrome glass community today'}
           </p>
         </div>
 
@@ -238,29 +218,6 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             )}
           </button>
         </form>
-
-        {/* Demo Fast Login Divider */}
-        <div className="relative my-5">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-white/10" />
-          </div>
-          <div className="relative flex justify-center text-center">
-            <span className="bg-[#090909] px-3 text-[10px] uppercase font-semibold text-zinc-500">
-              Or test instantly
-            </span>
-          </div>
-        </div>
-
-        {/* Quick Demo Login Button */}
-        <button
-          type="button"
-          onClick={handleDemoLogin}
-          disabled={loading}
-          className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs border border-white/15 flex items-center justify-center gap-2 transition-colors cursor-pointer"
-        >
-          <Sparkles className="w-3.5 h-3.5 text-white" />
-          <span>One-Click Demo Sign In</span>
-        </button>
       </div>
     </div>
   );

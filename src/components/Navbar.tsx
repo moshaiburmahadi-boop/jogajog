@@ -1,7 +1,6 @@
 import React from 'react';
 import { 
   Sparkles, 
-  Database, 
   Download, 
   MessageCircle, 
   Wifi, 
@@ -12,13 +11,11 @@ import {
   ShieldCheck
 } from 'lucide-react';
 import { NavigationTab, User } from '../types';
-import { isSupabaseConfigured } from '../lib/supabase';
 import { usePWAInstall } from '../hooks/usePWAInstall';
 
 interface NavbarProps {
   currentTab: NavigationTab;
   onSelectTab: (tab: NavigationTab) => void;
-  onOpenSupabaseDocs: () => void;
   unreadMessagesCount: number;
   currentUser: User;
   isLoggedIn: boolean;
@@ -29,7 +26,6 @@ interface NavbarProps {
 export const Navbar: React.FC<NavbarProps> = ({
   currentTab,
   onSelectTab,
-  onOpenSupabaseDocs,
   unreadMessagesCount,
   currentUser,
   isLoggedIn,
@@ -91,18 +87,6 @@ export const Navbar: React.FC<NavbarProps> = ({
               </>
             )}
           </div>
-
-          {/* Supabase Architecture / DDL Modal Trigger */}
-          <button
-            id="navbar-supabase-btn"
-            onClick={onOpenSupabaseDocs}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-zinc-900 hover:bg-zinc-800 text-zinc-200 border border-white/15 transition-all shadow-sm cursor-pointer"
-            title="Supabase PostgreSQL Backend & Architecture"
-          >
-            <Database className="w-3.5 h-3.5 text-white" />
-            <span className="hidden xs:inline">Supabase</span>
-            {isSupabaseConfigured && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />}
-          </button>
 
           {/* PWA Install Button */}
           {(!isInstalled && (isInstallable || isIOS)) && (

@@ -10,9 +10,9 @@ import { StoryViewerModal } from './components/StoryViewerModal';
 import { CreatePostModal } from './components/CreatePostModal';
 import { CommentsDrawer } from './components/CommentsDrawer';
 import { PostDetailModal } from './components/PostDetailModal';
-import { SupabaseDocsModal } from './components/SupabaseDocsModal';
 import { AuthModal } from './components/AuthModal';
 import { AuthScreen } from './components/AuthScreen';
+import { SignOutConfirmModal } from './components/SignOutConfirmModal';
 import { PWAInstallBanner } from './components/PWAInstallBanner';
 
 import { NavigationTab, Post, Story } from './types';
@@ -53,8 +53,8 @@ export default function App() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [commentingPost, setCommentingPost] = useState<Post | null>(null);
   const [inspectingPost, setInspectingPost] = useState<Post | null>(null);
-  const [isSupabaseDocsOpen, setIsSupabaseDocsOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [isSignOutConfirmOpen, setIsSignOutConfirmOpen] = useState(false);
 
   // Subscribe to persistent store updates
   useEffect(() => {
@@ -134,14 +134,7 @@ export default function App() {
             setCurrentTab('feed');
             setCurrentUser(getCurrentUser());
           }}
-          onOpenSupabaseDocs={() => setIsSupabaseDocsOpen(true)}
         />
-
-        {isSupabaseDocsOpen && (
-          <SupabaseDocsModal
-            onClose={() => setIsSupabaseDocsOpen(false)}
-          />
-        )}
       </div>
     );
   }
@@ -156,11 +149,10 @@ export default function App() {
       <Navbar
         currentTab={currentTab}
         onSelectTab={setCurrentTab}
-        onOpenSupabaseDocs={() => setIsSupabaseDocsOpen(true)}
         unreadMessagesCount={unreadMessagesCount}
         isLoggedIn={isLoggedIn}
         onOpenAuthModal={() => setIsAuthModalOpen(true)}
-        onSignOut={handleSignOut}
+        onSignOut={() => setIsSignOutConfirmOpen(true)}
         currentUser={currentUser}
       />
 
@@ -213,8 +205,8 @@ export default function App() {
             onSelectPost={(post) => setInspectingPost(post)}
             onUpdateUser={handleUpdateUser}
             isLoggedIn={isLoggedIn}
-            onOpenAuth={() => setIsAuthModalOpen(true)}
-            onSignOut={handleSignOut}
+            onOpenAuthModal={() => setIsAuthModalOpen(true)}
+            onSignOut={() => setIsSignOutConfirmOpen(true)}
             onOpenCreatePost={() => setIsCreateModalOpen(true)}
           />
         )}
@@ -286,12 +278,13 @@ export default function App() {
         />
       )}
 
-      {/* 6. Supabase Backend Architecture & Live Credentials Modal */}
-      {isSupabaseDocsOpen && (
-        <SupabaseDocsModal
-          onClose={() => setIsSupabaseDocsOpen(false)}
-        />
-      )}
+      {/* 6. Sign Out Confirmation Popup */}
+      <SignOutConfirmModal
+        isOpen={isSignOutConfirmOpen}
+        onClose={() => setIsSignOutConfirmOpen(false)}
+        onConfirm={handleSignOut}
+        username={currentUser?.username}
+      />
     </div>
   );
 }
