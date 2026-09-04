@@ -1,0 +1,6 @@
+{
+  "name": "Glassmorphism Social App",
+  "description": "Apple Glassmorphism social media progressive web app with stories, explore feeds, direct messaging, user profiles, and Supabase backend architecture.",
+  "requestFramePermissions": ["camera", "microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

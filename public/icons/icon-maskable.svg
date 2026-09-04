@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bgGradMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a"/>
+      <stop offset="50%" stop-color="#090d16"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="glassGradMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.45)"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.08)"/>
+    </linearGradient>
+    <linearGradient id="irisGradMask" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="50%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#c084fc"/>
+    </linearGradient>
+  </defs>
+  <!-- Full canvas fill for maskable icon -->
+  <rect width="512" height="512" fill="url(#bgGradMask)"/>
+  
+  <!-- Safe Zone content: Centered within 80% circle -->
+  <g transform="translate(256, 256) scale(0.8) translate(-256, -256)">
+    <!-- Frosted Glass Card -->
+    <rect x="96" y="96" width="320" height="320" rx="72" fill="url(#glassGradMask)" stroke="rgba(255,255,255,0.35)" stroke-width="4"/>
+    <circle cx="256" cy="256" r="86" stroke="url(#irisGradMask)" stroke-width="14" fill="rgba(15,23,42,0.45)" />
+    <circle cx="256" cy="256" r="42" fill="url(#irisGradMask)"/>
+    <circle cx="336" cy="176" r="16" fill="#38bdf8"/>
+  </g>
+</svg>
