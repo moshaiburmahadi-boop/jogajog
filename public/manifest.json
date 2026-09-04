@@ -1,7 +1,7 @@
 {
-  "name": "Glassmorphism Social",
-  "short_name": "GlassSocial",
-  "description": "Apple Glassmorphism social media progressive web app with real-time feeds, stories, and explore grid.",
+  "name": "jogajog",
+  "short_name": "jogajog",
+  "description": "jogajog - Apple Glassmorphism social media progressive web app with real-time feeds, stories, and explore grid.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0b0e14",

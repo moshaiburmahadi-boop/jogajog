@@ -5,7 +5,7 @@ export const CURRENT_USER: User = {
   username: 'user',
   name: 'New User',
   avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=400&auto=format&fit=crop&q=80',
-  bio: 'Welcome to Lumina Social.',
+  bio: 'Welcome to jogajog.',
   website: '',
   location: '',
   verified: false,

@@ -1,6 +1,6 @@
 {
-  "name": "Lumina Social App",
-  "description": "Apple Glassmorphism social media progressive web app with stories, explore feeds, direct messaging, and secure authentication.",
+  "name": "jogajog",
+  "description": "jogajog - Apple Glassmorphism social media progressive web app with stories, explore feeds, direct messaging, and secure authentication.",
   "requestFramePermissions": ["camera", "microphone"],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

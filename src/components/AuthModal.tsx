@@ -80,12 +80,12 @@ export const AuthModal: React.FC<AuthModalProps> = ({ isOpen, onClose, onSuccess
             <Lock className="w-6 h-6 text-black" />
           </div>
           <h2 className="text-xl font-bold text-white tracking-tight">
-            {mode === 'signin' ? 'Sign in to Lumina' : 'Create Lumina Account'}
+            {mode === 'signin' ? 'Sign in to jogajog' : 'Create jogajog Account'}
           </h2>
           <p className="text-xs text-zinc-400 mt-1">
             {mode === 'signin' 
               ? 'Enter your credentials to access your account' 
-              : 'Join the monochrome glass community today'}
+              : 'Join the jogajog community today'}
           </p>
         </div>
 

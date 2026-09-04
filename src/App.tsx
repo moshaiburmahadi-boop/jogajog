@@ -12,6 +12,7 @@ import { CommentsDrawer } from './components/CommentsDrawer';
 import { PostDetailModal } from './components/PostDetailModal';
 import { AuthModal } from './components/AuthModal';
 import { AuthScreen } from './components/AuthScreen';
+import { ProtectedRoute } from './components/ProtectedRoute';
 import { SignOutConfirmModal } from './components/SignOutConfirmModal';
 import { PWAInstallBanner } from './components/PWAInstallBanner';
 
@@ -123,25 +124,26 @@ export default function App() {
   const myPosts = posts.filter((p) => p.userId === currentUser.id);
   const savedPosts = posts.filter((p) => p.isSaved);
 
-  // IF NOT LOGGED IN: Show Login/Sign Up Page First
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
-        <PWAInstallBanner />
-        <AuthScreen
-          onSuccess={() => {
-            setIsLoggedIn(true);
-            setCurrentTab('feed');
-            setCurrentUser(getCurrentUser());
-          }}
-        />
-      </div>
-    );
-  }
-
-  // IF LOGGED IN: Show Home Page / App Views
+  // Protected Route: If no active session, forcefully redirected to Login / Sign-up
   return (
-    <div className="min-h-screen bg-black text-white relative overflow-x-hidden selection:bg-white selection:text-black">
+    <ProtectedRoute
+      onSessionInvalid={() => {
+        setIsLoggedIn(false);
+      }}
+      fallback={
+        <div className="min-h-screen bg-black text-white selection:bg-white selection:text-black">
+          <PWAInstallBanner />
+          <AuthScreen
+            onSuccess={() => {
+              setIsLoggedIn(true);
+              setCurrentTab('feed');
+              setCurrentUser(getCurrentUser());
+            }}
+          />
+        </div>
+      }
+    >
+      <div className="min-h-screen bg-black text-white relative overflow-x-hidden selection:bg-white selection:text-black">
       {/* PWA Floating Install Banner */}
       <PWAInstallBanner />
 
@@ -286,5 +288,6 @@ export default function App() {
         username={currentUser?.username}
       />
     </div>
+    </ProtectedRoute>
   );
 }

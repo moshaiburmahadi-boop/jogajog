@@ -183,7 +183,9 @@ export async function signUpUser(params: {
       return { success: false, error: 'Please enter your full name.' };
     }
 
-    // Try Supabase auth if connected
+    let newUserId = `usr_${Date.now()}`;
+
+    // STRICT SUPABASE SIGN-UP
     if (supabase && params.password) {
       const { data, error } = await supabase.auth.signUp({
         email: trimmedEmail,
@@ -191,6 +193,7 @@ export async function signUpUser(params: {
         options: {
           data: {
             username: trimmedUsername,
+            full_name: trimmedName,
             name: trimmedName,
           },
         },
@@ -198,14 +201,17 @@ export async function signUpUser(params: {
       if (error) {
         return { success: false, error: error.message };
       }
+      if (data.user?.id) {
+        newUserId = data.user.id;
+      }
     }
 
     const newUser: User = {
-      id: `usr_${Date.now()}`,
+      id: newUserId,
       username: trimmedUsername,
       name: trimmedName,
       avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${trimmedUsername}`,
-      bio: 'New member of Lumina',
+      bio: 'New member of jogajog',
       website: '',
       location: '',
       verified: false,
@@ -247,38 +253,35 @@ export async function signInUser(params: {
     if (!trimmedEmail || !trimmedEmail.includes('@')) {
       return { success: false, error: 'Please enter a valid email address.' };
     }
+    if (!params.password) {
+      return { success: false, error: 'Password is required.' };
+    }
 
-    // Try Supabase auth if connected
-    if (supabase && params.password) {
+    // STRICT SUPABASE AUTHENTICATION
+    if (supabase) {
       const { data, error } = await supabase.auth.signInWithPassword({
         email: trimmedEmail,
         password: params.password,
       });
+
       if (error) {
         return { success: false, error: error.message };
       }
-    }
 
-    const users = getLocal<Record<string, { user: User; password?: string }>>(
-      STORAGE_KEYS.REGISTERED_USERS, 
-      {}
-    );
-
-    let loggedInUser: User;
-    if (users[trimmedEmail]) {
-      if (users[trimmedEmail].password && params.password && users[trimmedEmail].password !== params.password) {
-        return { success: false, error: 'Incorrect password. Please verify and try again.' };
+      if (!data.user) {
+        return { success: false, error: 'User not found. Please verify your credentials.' };
       }
-      loggedInUser = users[trimmedEmail].user;
-    } else {
-      // Auto-create local user profile for seamless sign-in
-      const namePart = trimmedEmail.split('@')[0];
-      loggedInUser = {
-        id: `usr_${Date.now()}`,
-        username: namePart.toLowerCase().replace(/[^a-z0-9._]/g, ''),
-        name: namePart.charAt(0).toUpperCase() + namePart.slice(1),
-        avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${namePart}`,
-        bio: 'Explorer & Creator',
+
+      const meta = data.user.user_metadata || {};
+      const username = meta.username || trimmedEmail.split('@')[0];
+      const name = meta.name || username;
+
+      const loggedInUser: User = {
+        id: data.user.id,
+        username,
+        name,
+        avatar: `https://api.dicebear.com/7.x/bottts/svg?seed=${username}`,
+        bio: 'Member of jogajog',
         website: '',
         location: '',
         verified: false,
@@ -286,20 +289,51 @@ export async function signInUser(params: {
         followingCount: 0,
         postsCount: 0,
       };
-      users[trimmedEmail] = { user: loggedInUser, password: params.password };
-      setLocal(STORAGE_KEYS.REGISTERED_USERS, users);
+
+      const session: AuthSession = {
+        user: loggedInUser,
+        email: trimmedEmail,
+        isLoggedIn: true,
+      };
+      setLocal(STORAGE_KEYS.SESSION, session);
+      setLocal(STORAGE_KEYS.USER, loggedInUser);
+      notifyChange();
+
+      return { success: true, user: loggedInUser };
+    }
+
+    // STRICT FALLBACK (WHEN NO SUPABASE CREDENTIALS PROVIDED)
+    // Completely block unregistered users. NO automatic account creation!
+    const users = getLocal<Record<string, { user: User; password?: string }>>(
+      STORAGE_KEYS.REGISTERED_USERS, 
+      {}
+    );
+
+    const record = users[trimmedEmail];
+    if (!record) {
+      return { 
+        success: false, 
+        error: 'No account found with this email. Please sign up first.' 
+      };
+    }
+
+    if (record.password !== params.password) {
+      return { 
+        success: false, 
+        error: 'Invalid password. Please check your credentials and try again.' 
+      };
     }
 
     const session: AuthSession = {
-      user: loggedInUser,
+      user: record.user,
       email: trimmedEmail,
       isLoggedIn: true,
     };
     setLocal(STORAGE_KEYS.SESSION, session);
-    setLocal(STORAGE_KEYS.USER, loggedInUser);
+    setLocal(STORAGE_KEYS.USER, record.user);
 
     notifyChange();
-    return { success: true, user: loggedInUser };
+    return { success: true, user: record.user };
   } catch (err: any) {
     return { success: false, error: err?.message || 'Sign in failed.' };
   }
@@ -346,7 +380,7 @@ export function quickDemoLogin(asUsername = 'black.minimalist'): User {
 
   const session: AuthSession = {
     user: demoUser,
-    email: `${asUsername}@lumina.black`,
+    email: `${asUsername}@jogajog.app`,
     isLoggedIn: true,
   };
   setLocal(STORAGE_KEYS.SESSION, session);

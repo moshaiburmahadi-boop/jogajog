@@ -267,7 +267,7 @@ export const CreatePostModal: React.FC<CreatePostModalProps> = ({
                   setSelectedAudio(
                     selectedAudio
                       ? undefined
-                      : { title: 'Nocturne in Black', artist: 'Lumina Sound' }
+                      : { title: 'Nocturne in Black', artist: 'jogajog Sound' }
                   )
                 }
                 className="text-[10px] text-white hover:underline cursor-pointer"

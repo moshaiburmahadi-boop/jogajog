@@ -60,9 +60,9 @@ export const Navbar: React.FC<NavbarProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-1.5">
-              <span className="font-bold tracking-tight text-white text-lg">Lumina</span>
+              <span className="font-bold tracking-tight text-white text-lg">jogajog</span>
               <span className="text-[10px] uppercase font-semibold tracking-wider px-1.5 py-0.5 rounded-full bg-zinc-900 text-white border border-white/15">
-                Black
+                App
               </span>
             </div>
           </div>
