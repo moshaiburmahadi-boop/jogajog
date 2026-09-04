@@ -11,15 +11,19 @@ import {
 } from '../data/mockData';
 import { Post, Story, Conversation, Message, NotificationItem, User, Comment, ExploreItem, AuthSession } from '../types';
 
-// Read env variables or localStorage overrides
+// Supabase Configuration for jogajog
+const DEFAULT_SUPABASE_URL = 'https://nqlyfvnbevrcpqqgxldv.supabase.co';
+const DEFAULT_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5xbHlmdm5iZXZyY3BxcWd4bGR2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg1NTE4OTksImV4cCI6MjEwNDEyNzg5OX0.MBFeH4s2foI3TAs_q06AqFhBMJoUbao_PHNNQU5lKLo';
+
+// Read env variables, localStorage, or provided credentials
 const envUrl = (import.meta as any).env?.VITE_SUPABASE_URL || '';
 const envAnonKey = (import.meta as any).env?.VITE_SUPABASE_ANON_KEY || '';
 
 const storedUrl = typeof window !== 'undefined' ? localStorage.getItem('glass_supabase_url') || '' : '';
 const storedKey = typeof window !== 'undefined' ? localStorage.getItem('glass_supabase_key') || '' : '';
 
-export const activeSupabaseUrl = storedUrl || envUrl;
-export const activeSupabaseKey = storedKey || envAnonKey;
+export const activeSupabaseUrl = envUrl || storedUrl || DEFAULT_SUPABASE_URL;
+export const activeSupabaseKey = envAnonKey || storedKey || DEFAULT_SUPABASE_ANON_KEY;
 
 export const isSupabaseConfigured = Boolean(activeSupabaseUrl && activeSupabaseKey);
 
